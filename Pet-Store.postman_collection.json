@@ -1,0 +1,503 @@
+{
+	"info": {
+		"_postman_id": "3471df35-f4b8-453d-867a-08d1107b8671",
+		"name": "Pet-Store",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "7044318"
+	},
+	"item": [
+		{
+			"name": "findByStatus - Successful",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var res = pm.response.json();",
+							"var content = res.length;",
+							"",
+							"pm.test(\"Status code is OK\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"validateIdIsNumber(res);",
+							"validateStatus(res)",
+							"validateName(res)",
+							"validateCategory(res)",
+							"validatePhotoUrls(res)",
+							"validateTags(res)",
+							"",
+							"function validateIdIsNumber(res) {",
+							"    pm.test(\"Verify id is a number\", () => {",
+							"        var isIdNumber = true;",
+							"        if (content) {",
+							"            for(var i = 0; i < content; i++) {",
+							"            var val = res[i].id;",
+							"            if(typeof val !== 'number') {",
+							"                isIdNumber = false;",
+							"                break;",
+							"            }",
+							"        }",
+							"    } else {",
+							"        isIdNumber = false;",
+							"    }",
+							"    pm.expect(isIdNumber).to.be.true",
+							"    });",
+							"}",
+							"",
+							"function validateStatus(res) {",
+							"    pm.test(\"Verify status is string\", () => {",
+							"        var status = true;",
+							"        if(content) {",
+							"            for(var i = 0; i < content; i++) {",
+							"                var val = res[i].status;",
+							"                if(typeof val !== 'string') {",
+							"                    status = false;",
+							"                    break;",
+							"                }",
+							"            }",
+							"        } else {",
+							"            status = false;",
+							"        }",
+							"        pm.expect(status).to.be.true",
+							"    });",
+							"}",
+							"",
+							"function validateName(res) {",
+							"    pm.test(\"Verify name is string\", () => {",
+							"        var name = true;",
+							"        if(content) {",
+							"            for(var i = 0; i < content; i++) {",
+							"                var val = res[i].name;",
+							"                if(typeof val !== 'string') {",
+							"                    name = false;",
+							"                    break;",
+							"                }",
+							"            }  ",
+							"        } else {",
+							"            name = false;",
+							"        }",
+							"        pm.expect(name).to.be.true",
+							"    });",
+							"}",
+							"",
+							"function validateCategory(res) {",
+							"    pm.test(\"Verify if category is present and contains pet id or name\", () => {",
+							"        var isCategoryValid = true;",
+							"        if(content) {",
+							"            for(var i = 0; i < content; i++) {",
+							"                var val = res[i].category;",
+							"                if(val && (val.hasOwnProperty(\"id\") || val.hasOwnProperty(\"name\"))) {",
+							"                    var isCategoryIdValid = true;",
+							"                    var isCategoryNameValid = true;",
+							"",
+							"                    if(typeof val.id !== 'number') {",
+							"                        isCategoryIdValid = false;",
+							"                        isCategoryValid = false",
+							"                        break;",
+							"                    }",
+							"                    if(typeof val.name !== 'string' && val.name != null) {",
+							"                        isCategoryNameValid = false;",
+							"                        isCategoryValid = false",
+							"                        break;",
+							"                    }",
+							"                    pm.expect(isCategoryIdValid).to.be.true",
+							"                    pm.expect(isCategoryNameValid).to.be.true",
+							"                }",
+							"            }",
+							"        } else {",
+							"            isCategoryValid = false",
+							"        }",
+							"        pm.expect(isCategoryValid).to.be.true",
+							"    });",
+							"}",
+							"",
+							"function validatePhotoUrls(res) {",
+							"    pm.test(\"Verify photoUrl is present and contains a string\", () => {",
+							"        var photoUrl = true;",
+							"        if(content) {",
+							"            for(var i = 0; i < content; i++) {",
+							"                var val = res[i].photoUrls;",
+							"                if(!val || !Array.isArray(val)) {",
+							"                    if(val.length !== 0 || !val.every(photo => typeof photo === 'string')) {",
+							"                    photoUrl = false",
+							"                    break;",
+							"                    }",
+							"                }",
+							"            }",
+							"        } else {",
+							"            photoUrl = false",
+							"        }",
+							"        pm.expect(photoUrl).to.be.true",
+							"    });",
+							"}",
+							"",
+							"function validateTags(res) {",
+							"    pm.test(\"Verify tags contains a valid object of pet name and id\", () => {",
+							"        var tags = true;",
+							"        if(content) {",
+							"            for(var i = 0; i < content; i++) {",
+							"                var val = res[i].tags;",
+							"                if(!val || !Array.isArray(val)) {",
+							"                    if(val.length !== 0 || !val.every(newVal => newVal.hasOwnProperty(\"id\") && newVal.hasOwnProperty(\"name\"))) {",
+							"                    tags = false",
+							"                    }",
+							"                }",
+							"            } ",
+							"        } else {",
+							"            tags = false",
+							"        }",
+							"        pm.expect(tags).to.be.true",
+							"    });",
+							"}",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://petstore.swagger.io/v2/pet/findByStatus?status=sold",
+					"protocol": "https",
+					"host": [
+						"petstore",
+						"swagger",
+						"io"
+					],
+					"path": [
+						"v2",
+						"pet",
+						"findByStatus"
+					],
+					"query": [
+						{
+							"key": "status",
+							"value": "sold"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "empty status",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var res = pm.response.json();",
+							"var content = res.length;",
+							"",
+							"pm.test(\"Status code is OK\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"validateIdIsNumber(res);",
+							"validateStatus(res)",
+							"validateName(res)",
+							"validateCategory(res)",
+							"validatePhotoUrls(res)",
+							"validateTags(res)",
+							"",
+							"function validateIdIsNumber(res) {",
+							"    pm.test(\"Verify id is a number\", () => {",
+							"        var isIdNumber = true;",
+							"        if (content) {",
+							"            for(var i = 0; i < content; i++) {",
+							"            var val = res[i].id;",
+							"            if(typeof val !== 'number') {",
+							"                isIdNumber = false;",
+							"                break;",
+							"            }",
+							"        }",
+							"    } else {",
+							"        isIdNumber = false;",
+							"    }",
+							"    pm.expect(isIdNumber).to.be.true",
+							"    });",
+							"}",
+							"",
+							"function validateStatus(res) {",
+							"    pm.test(\"Verify status is string\", () => {",
+							"        var status = true;",
+							"        if(content) {",
+							"            for(var i = 0; i < content; i++) {",
+							"                var val = res[i].status;",
+							"                if(typeof val !== 'string') {",
+							"                    status = false;",
+							"                    break;",
+							"                }",
+							"            }",
+							"        } else {",
+							"            status = false;",
+							"        }",
+							"        pm.expect(status).to.be.true",
+							"    });",
+							"}",
+							"",
+							"function validateName(res) {",
+							"    pm.test(\"Verify name is string\", () => {",
+							"        var name = true;",
+							"        if(content) {",
+							"            for(var i = 0; i < content; i++) {",
+							"                var val = res[i].name;",
+							"                if(typeof val !== 'string') {",
+							"                    name = false;",
+							"                    break;",
+							"                }",
+							"            }  ",
+							"        } else {",
+							"            name = false;",
+							"        }",
+							"        pm.expect(name).to.be.true",
+							"    });",
+							"}",
+							"",
+							"function validateCategory(res) {",
+							"    pm.test(\"Verify if category is present and contains pet id or name\", () => {",
+							"        var isCategoryValid = true;",
+							"        if(content) {",
+							"            for(var i = 0; i < content; i++) {",
+							"                var val = res[i].category;",
+							"                if(val && (val.hasOwnProperty(\"id\") || val.hasOwnProperty(\"name\"))) {",
+							"                    var isCategoryIdValid = true;",
+							"                    var isCategoryNameValid = true;",
+							"",
+							"                    if(typeof val.id !== 'number') {",
+							"                        isCategoryIdValid = false;",
+							"                        isCategoryValid = false",
+							"                        break;",
+							"                    }",
+							"                    if(typeof val.name !== 'string' && val.name != null) {",
+							"                        isCategoryNameValid = false;",
+							"                        isCategoryValid = false",
+							"                        break;",
+							"                    }",
+							"                    pm.expect(isCategoryIdValid).to.be.true",
+							"                    pm.expect(isCategoryNameValid).to.be.true",
+							"                }",
+							"            }",
+							"        } else {",
+							"            isCategoryValid = false",
+							"        }",
+							"        pm.expect(isCategoryValid).to.be.true",
+							"    });",
+							"}",
+							"",
+							"function validatePhotoUrls(res) {",
+							"    pm.test(\"Verify photoUrl is present and contains a string\", () => {",
+							"        var photoUrl = true;",
+							"        if(content) {",
+							"            for(var i = 0; i < content; i++) {",
+							"                var val = res[i].photoUrls;",
+							"                if(!val || !Array.isArray(val)) {",
+							"                    if(val.length !== 0 || !val.every(photo => typeof photo === 'string')) {",
+							"                    photoUrl = false",
+							"                    break;",
+							"                    }",
+							"                }",
+							"            }",
+							"        } else {",
+							"            photoUrl = false",
+							"        }",
+							"        pm.expect(photoUrl).to.be.true",
+							"    });",
+							"}",
+							"",
+							"function validateTags(res) {",
+							"    pm.test(\"Verify tags contains a valid object of pet name and id\", () => {",
+							"        var tags = true;",
+							"        if(content) {",
+							"            for(var i = 0; i < content; i++) {",
+							"                var val = res[i].tags;",
+							"                if(!val || !Array.isArray(val)) {",
+							"                    if(val.length !== 0 || !val.every(newVal => newVal.hasOwnProperty(\"id\") && newVal.hasOwnProperty(\"name\"))) {",
+							"                    tags = false",
+							"                    }",
+							"                }",
+							"            } ",
+							"        } else {",
+							"            tags = false",
+							"        }",
+							"        pm.expect(tags).to.be.true",
+							"    });",
+							"}",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://petstore.swagger.io/v2/pet/findByStatus?status=",
+					"protocol": "https",
+					"host": [
+						"petstore",
+						"swagger",
+						"io"
+					],
+					"path": [
+						"v2",
+						"pet",
+						"findByStatus"
+					],
+					"query": [
+						{
+							"key": "status",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "invalid status",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var res = pm.response.json();",
+							"var content = res;",
+							"",
+							"pm.test(\"Status code is OK\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"validateResponseBody(res)",
+							"",
+							"function validateResponseBody(res) {",
+							"    pm.test(\"verify that response array is empty\", () => {",
+							"        var isResponseEmpty = true;",
+							"        if(content.length !== 0 ) {",
+							"            isResponseEmpty = false",
+							"        } else {",
+							"            isResponseEmpty = true",
+							"        }",
+							"        pm.expect(isResponseEmpty).to.be.true",
+							"    });",
+							"}",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://petstore.swagger.io/v2/pet/findByStatus?status=requested",
+					"protocol": "https",
+					"host": [
+						"petstore",
+						"swagger",
+						"io"
+					],
+					"path": [
+						"v2",
+						"pet",
+						"findByStatus"
+					],
+					"query": [
+						{
+							"key": "status",
+							"value": "requested"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "null status",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var res = pm.response.json();",
+							"var content = res.length;",
+							"",
+							"pm.test(\"Status code is OK\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"validateArrayIsEmpty();",
+							"",
+							"function validateArrayIsEmpty(){",
+							"    pm.test(\"Verify array is empty\", () => {",
+							"        var array = true;",
+							"        if (content !== 0) {",
+							"            array = false;",
+							"        }",
+							"        pm.expect(array).to.be.true;",
+							"    })",
+							"}",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://petstore.swagger.io/v2/pet/findByStatus",
+					"protocol": "https",
+					"host": [
+						"petstore",
+						"swagger",
+						"io"
+					],
+					"path": [
+						"v2",
+						"pet",
+						"findByStatus"
+					],
+					"query": [
+						{
+							"key": "status",
+							"value": "",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
